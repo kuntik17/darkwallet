@@ -35,10 +35,6 @@ export async function encryptWithLit(
   accessControlConditions: AccessControlConditions,
   chain: string
 ): Promise<{ ciphertext: string; dataToEncryptHash: string }> {
-  let authSig = await checkAndSignAuthMessage({
-    chain,
-  });
-
   const { ciphertext, dataToEncryptHash } = await LitJsSdk.encryptString(
     {
       accessControlConditions,
@@ -62,6 +58,7 @@ export async function decryptWithLit(
 ): Promise<string> {
   let authSig = await checkAndSignAuthMessage({
     chain,
+    nonce: Date.now().toString(),
   });
 
   const decryptedString = await LitJsSdk.decryptToString(

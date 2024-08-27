@@ -56,8 +56,13 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     const { data, error } = await supabase.from("secrets").select("*");
     if (error) {
       console.error(error);
+      return;
     }
-    setMessages(data);
+    if (data) {
+      setMessages(data);
+    } else {
+      setMessages([]);
+    }
   };
 
   const login = async () => {
