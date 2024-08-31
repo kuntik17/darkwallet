@@ -8,6 +8,8 @@ import { ILitNodeClient } from "@lit-protocol/types";
 import { encryptWithLit, decryptWithLit, decodeb64 } from "@/lib/lit";
 import supabase from "@/lib/supabase";
 
+import { Database } from "@tableland/sdk";
+
 type Web3ContextType = {
   address: string | null;
   login: () => void;
