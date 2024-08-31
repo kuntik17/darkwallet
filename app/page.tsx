@@ -12,7 +12,7 @@ export default function Home() {
       <WavyBackground className="flex flex-col justify-center items-center text-white">
         <TypingAnimation />
         <div className="flex gap-2">
-          <button onClick={login} className="bg-amber-300 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg w-[168px] px-4 py-2 mt-6">
+          <button onClick={login} className="bg-amber-300 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg w-[219px] h-[40px] px-4 py-2">
             Login with Wallet
           </button>
           <TelegramLogin />
