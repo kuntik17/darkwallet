@@ -59,7 +59,7 @@ export default function Dashboard() {
       .join("\n");
 
     const encoder = new TextEncoder();
-    const secretKeyHash = await crypto.subtle.digest("SHA-256", encoder.encode("7526831514:AAGBKD5tLaTsocnuddipaobSNBRAmk_-6BQ"));
+    const secretKeyHash = await crypto.subtle.digest("SHA-256", encoder.encode(process.env.NEXT_PUBLIC_TELEGRAM_BOT_SECRET));
     const key = await crypto.subtle.importKey("raw", secretKeyHash, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
     const signature = await crypto.subtle.sign("HMAC", key, encoder.encode(dataCheckString));
 
@@ -116,7 +116,7 @@ export default function Dashboard() {
               >
                 Add data
               </button>
-              <TelegramLogin />
+              {/* <TelegramLogin /> */}
             </div>
           </div>
           <h3 className="text-base font-semibold leading-6 text-amber-200 mt-8">Current data in your wallet</h3>
