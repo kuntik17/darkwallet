@@ -95,26 +95,6 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     return { isValid, isRecent };
   }, []);
 
-  const handleTelegramResponse = useCallback(
-    async (user: TelegramUser) => {
-      console.log("Telegram auth response received:", user);
-      if (user && typeof user === "object") {
-        setTgUser(user);
-        await handleMintPkp();
-        const { isValid, isRecent } = await verifyTelegramUser(user);
-        if (!isValid || !isRecent) {
-          setValidationError(!isValid ? "Failed to validate Telegram user info. Please try again." : "Authentication has expired. Please log in again.");
-        } else {
-          setValidationError(null);
-        }
-      } else {
-        console.error("Invalid user data received:", user);
-        setValidationError("Invalid user data received. Please try again.");
-      }
-    },
-    [verifyTelegramUser]
-  );
-
   const handleMintPkp = async () => {
     if (tgUser) {
       try {
@@ -128,6 +108,30 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
       }
     }
   };
+
+  const handleTelegramResponse = useCallback(
+    async (user: TelegramUser) => {
+      console.log("Telegram auth response received:", user);
+      if (user && typeof user === "object") {
+        setTgUser(user);
+
+        const minted = await mintPkp(user);
+        console.log("minted", minted);
+        setMintedPkp(minted!);
+
+        const { isValid, isRecent } = await verifyTelegramUser(user);
+        if (!isValid || !isRecent) {
+          setValidationError(!isValid ? "Failed to validate Telegram user info. Please try again." : "Authentication has expired. Please log in again.");
+        } else {
+          setValidationError(null);
+        }
+      } else {
+        console.error("Invalid user data received:", user);
+        setValidationError("Invalid user data received. Please try again.");
+      }
+    },
+    [verifyTelegramUser, setTgUser, setMintedPkp, setValidationError]
+  );
 
   const handleGetPkpSessionSigs = async () => {
     if (tgUser && mintedPkp) {
