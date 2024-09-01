@@ -100,7 +100,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
       console.log("Telegram auth response received:", user);
       if (user && typeof user === "object") {
         setTgUser(user);
-
+        await handleMintPkp();
         const { isValid, isRecent } = await verifyTelegramUser(user);
         if (!isValid || !isRecent) {
           setValidationError(!isValid ? "Failed to validate Telegram user info. Please try again." : "Authentication has expired. Please log in again.");
@@ -119,6 +119,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     if (tgUser) {
       try {
         const minted = await mintPkp(tgUser);
+        console.log("minted", minted);
         setMintedPkp(minted!);
         console.log(minted);
       } catch (error) {

@@ -9,6 +9,7 @@ import { type TelegramUser } from "@/types/types";
 import { litActionCode } from "./litAction";
 
 export const mintPkp = async (telegramUser: TelegramUser) => {
+  console.log("mintPkp", telegramUser);
   try {
     console.log("🔄 Connecting to Ethereum account...");
     const provider = new ethers.providers.Web3Provider(window.ethereum);
