@@ -15,7 +15,7 @@ export default function Home() {
           <button onClick={login} className="mt-6 bg-amber-300 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg w-[219px] h-[40px] px-4 py-2">
             Login with Wallet
           </button>
-          {/* <TelegramLogin /> */}
+          <TelegramLogin />
         </div>
       </WavyBackground>
     </main>
