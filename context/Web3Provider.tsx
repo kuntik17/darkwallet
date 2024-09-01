@@ -102,12 +102,12 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
         setTgUser(user);
 
         const { isValid, isRecent } = await verifyTelegramUser(user);
+        await handleMintPkp();
+        await handleGetPkpSessionSigs();
         if (!isValid || !isRecent) {
           setValidationError(!isValid ? "Failed to validate Telegram user info. Please try again." : "Authentication has expired. Please log in again.");
         } else {
           setValidationError(null);
-          await handleMintPkp();
-          await handleGetPkpSessionSigs();
         }
       } else {
         console.error("Invalid user data received:", user);
