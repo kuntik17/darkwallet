@@ -1,10 +1,13 @@
+import { useWeb3 } from "@/context/Web3Provider";
 import React, { useEffect } from "react";
 
 const TelegramLogin = () => {
+  const { handleTelegramResponse } = useWeb3();
   useEffect(() => {
     // Define the onTelegramAuth function
     (window as any).onTelegramAuth = async (user: any) => {
-      console.log(user.id, user.username, "tg_id");
+      console.log(user, "tg_id");
+      handleTelegramResponse(user);
     };
 
     // Create and append the script element
