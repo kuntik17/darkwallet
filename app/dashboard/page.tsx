@@ -3,15 +3,19 @@
 import { WavyBackground } from "@/components/ui/wavy-background";
 import { BsEye } from "react-icons/bs";
 import Popup from "@/components/ui/popup";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useWeb3 } from "@/context/Web3Provider";
 import { blobToBase64, encodeb64 } from "@/lib/lit";
 import ViewPopup from "@/components/ui/viewPopup";
+import TelegramLoginButton from "@/components/ui/telegram-login";
+import { TelegramUser } from "@/types/types";
+import TelegramLogin from "@/components/ui/telegram-login";
 
 export default function Dashboard() {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<any>(null);
   const [openView, setOpenView] = useState(false);
+
   const { address, hideMessage, messages, viewMessage } = useWeb3();
 
   const handleForm = (formData: any) => {
@@ -59,6 +63,7 @@ export default function Dashboard() {
               >
                 Add data
               </button>
+              {/* <TelegramLogin /> */}
             </div>
           </div>
           <h3 className="text-base font-semibold leading-6 text-amber-200 mt-8">Current data in your wallet</h3>
@@ -88,3 +93,39 @@ export default function Dashboard() {
     </main>
   );
 }
+
+// import { useState, useEffect, useCallback } from "react";
+
+// import TelegramLoginButton from "./TelegramLoginButton";
+// import { mintPkp } from "./mintPkp";
+// import { getPkpSessionSigs } from "./getPkpSessionSigs";
+// import { type TelegramUser } from "./types";
+
+// type MintedPkp = {
+//   tokenId: string;
+//   publicKey: string;
+//   ethAddress: string;
+// };
+// type PkpSessionSigs = any;
+
+// interface EnvVariables {
+//   VITE_TELEGRAM_BOT_NAME: string;
+//   VITE_TELEGRAM_BOT_SECRET: string;
+// }
+
+// function App() {
+//   const {
+//     VITE_TELEGRAM_BOT_NAME = "LitDevGuidesBot",
+//     VITE_TELEGRAM_BOT_SECRET,
+//   } = import.meta.env as unknown as EnvVariables;
+
+//   const [mintedPkp, setMintedPkp] = useState<MintedPkp | null>(null);
+//   const [pkpSessionSigs, setPkpSessionSigs] = useState<PkpSessionSigs | null>(
+//     null
+//   );
+
+//   useEffect(() => {
+//     if (telegramUser) {
+//       console.log("Current telegramUser state:", telegramUser);
+//     }
+//   }, [telegramUser]);
