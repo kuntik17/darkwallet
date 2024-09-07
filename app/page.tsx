@@ -4,7 +4,7 @@ import { WavyBackground } from "@/components/ui/wavy-background";
 import { useEffect, useState } from "react";
 import { getSessionSignatures, connectToLitNodes, connectToLitContracts } from "@/lib/litConnections";
 import { useTelegram } from "@/context/TelegramProvider";
-import ethereum from "@/lib/metamaskSdk";
+import { useSDK } from "@metamask/sdk-react";
 interface TelegramWebApp {
   ready: () => void;
   showPopup: (params: { title?: string; message: string; buttons: Array<{ text: string; type: string }> }) => void;
@@ -22,6 +22,7 @@ declare global {
 
 export default function Home() {
   const { user, webApp } = useTelegram();
+  const { sdk, connected, /*connecting, */ provider /*chainId*/ } = useSDK();
   interface TelegramWebApp {
     ready: () => void;
     showPopup: (params: { title?: string; message: string; buttons: Array<{ text: string; type: string }> }) => void;
@@ -89,9 +90,9 @@ export default function Home() {
 
   const connect = async () => {
     try {
-      const accounts = await ethereum!.request({ method: "eth_requestAccounts", params: [] });
-
+      const accounts = await sdk?.connect();
       console.log(accounts);
+      setAccount(accounts?.[0]);
     } catch (err) {
       console.warn("failed to connect..", err);
     }
