@@ -4,6 +4,7 @@ import { WavyBackground } from "@/components/ui/wavy-background";
 import { useEffect, useState } from "react";
 import { getSessionSignatures, connectToLitNodes, connectToLitContracts } from "@/lib/litConnections";
 import { MetaMaskProvider, useSDK } from "@metamask/sdk-react";
+import { useTelegram } from "@/context/TelegramProvider";
 
 const host = typeof window !== "undefined" ? window.location.host : "defaultHost";
 
@@ -32,6 +33,7 @@ declare global {
 }
 
 export default function Home() {
+  const { user, webApp } = useTelegram();
   interface TelegramWebApp {
     ready: () => void;
     showPopup: (params: { title?: string; message: string; buttons: Array<{ text: string; type: string }> }) => void;
@@ -39,7 +41,7 @@ export default function Home() {
     initDataUnsafe: any;
   }
 
-  const [webApp, setWebApp] = useState<TelegramWebApp | null>(null);
+  //const [webApp, setWebApp] = useState<TelegramWebApp | null>(null);
   const [account, setAccount] = useState<string | null>(null);
   const { sdk, connected, /*connecting, */ provider /*chainId*/ } = useSDK();
   const [pkp, setPkp] = useState<{
@@ -53,27 +55,11 @@ export default function Home() {
   const [data, setData] = useState<any | null>(null);
 
   useEffect(() => {
-    const tgApp = window.Telegram?.WebApp;
-    console.log(tgApp);
-    if (tgApp) {
-      tgApp.ready();
-      setWebApp(tgApp);
-      setData(tgApp.initData);
-      console.log(tgApp.initData);
-      isRecent(tgApp.initData).then((isRecent) => {
-        setRecent(isRecent);
-      });
-
-      verifyInitData(tgApp.initData, process.env.NEXT_PUBLIC_TELEGRAM_BOT_SECRET as string)
-        .then((isVerified) => {
-          console.log("isVerified", isVerified);
-          setValid(isVerified);
-        })
-        .catch((error) => {
-          console.error("Error verifying init data:", error);
-        });
+    if (user && webApp) {
+      webApp.expand();
+      console.log(user);
     }
-  }, []);
+  }, [webApp, user]);
 
   async function isRecent(telegramInitData: string) {
     const urlParams: URLSearchParams = new URLSearchParams(telegramInitData);

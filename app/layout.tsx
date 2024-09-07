@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Web3Provider } from "@/context/Web3Provider";
+import Script from "next/script";
+import { TelegramProvider } from "@/context/TelegramProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +19,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Web3Provider>
-        <body className={inter.className}>{children}</body>
-      </Web3Provider>
+      <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
+      <TelegramProvider>
+        <Web3Provider>
+          <body className={inter.className}>{children}</body>
+        </Web3Provider>
+      </TelegramProvider>
     </html>
   );
 }
