@@ -44,7 +44,7 @@ export const getSessionSignatures = async (litNodeClient: LitNodeClient, pkp: an
     litActionCode: Buffer.from(litActionCode).toString("base64"),
     jsParams: {
       telegramUserData: telegramUser,
-      telegramBotSecret: import.meta.env.VITE_TELEGRAM_BOT_TOKEN,
+      telegramBotSecret: process.env.NEXT_PUBLIC_TELEGRAM_BOT_SECRET,
       pkpTokenId: pkp.tokenId,
     },
     resourceAbilityRequests: [
