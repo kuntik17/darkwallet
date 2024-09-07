@@ -3,7 +3,18 @@ import TypingAnimation from "@/components/ui/typing";
 import { WavyBackground } from "@/components/ui/wavy-background";
 import { useEffect, useState } from "react";
 import { getSessionSignatures, connectToLitNodes, connectToLitContracts } from "@/lib/litConnections";
-import { useSDK } from "@metamask/sdk-react";
+import { MetaMaskProvider, useSDK } from "@metamask/sdk-react";
+
+const host = typeof window !== "undefined" ? window.location.host : "defaultHost";
+
+const sdkOptions = {
+  logging: { developerMode: false },
+  checkInstallationImmediately: false,
+  dappMetadata: {
+    name: "Next-Metamask-Boilerplate",
+    url: host, // using the host constant defined above
+  },
+};
 
 interface TelegramWebApp {
   ready: () => void;
@@ -130,9 +141,11 @@ export default function Home() {
       <WavyBackground className="flex flex-col justify-center items-center text-white">
         <TypingAnimation />
         <div className="flex gap-2">
-          <button onClick={connect} className="mt-6 bg-amber-300 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg w-[219px] h-[40px] px-4 py-2">
-            Login with Wallet
-          </button>
+          <MetaMaskProvider debug={false} sdkOptions={sdkOptions}>
+            <button onClick={connect} className="mt-6 bg-amber-300 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg w-[219px] h-[40px] px-4 py-2">
+              Login with Wallet
+            </button>
+          </MetaMaskProvider>
         </div>
       </WavyBackground>
     </main>

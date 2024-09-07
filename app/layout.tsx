@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Web3Provider } from "@/context/Web3Provider";
-import { MetaMaskProvider } from "@metamask/sdk-react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,19 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <MetaMaskProvider
-        debug={false}
-        sdkOptions={{
-          dappMetadata: {
-            name: "Lit Telegram Mini App",
-            url: window.location.href,
-          },
-        }}
-      >
-        <Web3Provider>
-          <body className={inter.className}>{children}</body>
-        </Web3Provider>
-      </MetaMaskProvider>
+      <Web3Provider>
+        <body className={inter.className}>{children}</body>
+      </Web3Provider>
     </html>
   );
 }
