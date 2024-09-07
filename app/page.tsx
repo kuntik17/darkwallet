@@ -95,7 +95,6 @@ export default function Home() {
           name: "Example JavaScript Dapp",
           url: window.location.href,
         },
-        infuraAPIKey: process.env.INFURA_API_KEY,
       });
       const ethereum = MMSDK.getProvider();
       const accounts = await ethereum!.request({ method: "eth_requestAccounts", params: [] });
