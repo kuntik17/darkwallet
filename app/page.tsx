@@ -33,7 +33,7 @@ export default function Home() {
 
   //const [webApp, setWebApp] = useState<TelegramWebApp | null>(null);
   const [account, setAccount] = useState<string | null>(null);
-  const { sdk, connected, /*connecting, */ provider /*chainId*/ } = useSDK();
+
   const [pkp, setPkp] = useState<{
     tokenId: any;
     publicKey: string;
@@ -103,10 +103,10 @@ export default function Home() {
     setSessionSignatures(sessionSignatures);
   };
 
-  const mintPkp = async () => {
-    const pkp = await connectToLitContracts(provider);
-    setPkp(pkp);
-  };
+  // const mintPkp = async () => {
+  //   const pkp = await connectToLitContracts(provider);
+  //   setPkp(pkp);
+  // };
 
   return (
     <main className="h-[100vh] flex justify-center items-center bg-black">
@@ -120,7 +120,4 @@ export default function Home() {
       </WavyBackground>
     </main>
   );
-}
-function useSDK(): { sdk: any; connected: any; provider: any } {
-  throw new Error("Function not implemented.");
 }
