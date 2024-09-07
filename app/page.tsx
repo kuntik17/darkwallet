@@ -121,3 +121,6 @@ export default function Home() {
     </main>
   );
 }
+function useSDK(): { sdk: any; connected: any; provider: any } {
+  throw new Error("Function not implemented.");
+}
