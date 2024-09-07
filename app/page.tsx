@@ -4,7 +4,6 @@ import { WavyBackground } from "@/components/ui/wavy-background";
 import { useEffect, useState } from "react";
 import { getSessionSignatures, connectToLitNodes, connectToLitContracts } from "@/lib/litConnections";
 import { useSDK } from "@metamask/sdk-react";
-import "./App.css";
 
 interface TelegramWebApp {
   ready: () => void;
