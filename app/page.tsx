@@ -101,11 +101,7 @@ export default function Home() {
     try {
       const accounts = await sdk?.connect();
       setAccount(accounts?.[0]);
-      webApp!.showPopup({
-        title: "Connected",
-        message: `Connected to MetaMask with account: ${accounts[0]}`,
-        buttons: [{ text: "Close", type: "close" }],
-      });
+      console.log(accounts);
     } catch (err) {
       console.warn("failed to connect..", err);
     }
