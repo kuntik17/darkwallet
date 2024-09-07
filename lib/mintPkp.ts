@@ -16,8 +16,6 @@ export const mintPkp = async (telegramUser: TelegramUser) => {
     await provider.send("eth_requestAccounts", []);
     const ethersSigner = provider.getSigner();
     console.log("✅ Connected Ethereum account:", await ethersSigner.getAddress());
-    const code = await provider.getCode("0x3b2cc0657d0387a736293d66389f78e4c8025e413c7a1ee67b7707d4418c46b8");
-    console.log("code", code);
 
     console.log("🔄 Connecting LitContracts client to network...");
     const litContracts = new LitContracts({
