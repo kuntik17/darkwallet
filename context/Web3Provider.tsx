@@ -46,8 +46,6 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const [pkpSessionSigs, setPkpSessionSigs] = useState<PkpSessionSigs | null>(null);
   const [telegramUser, setTelegramUser] = useState<TelegramUser | null>(null);
 
-  window.scrollTo(0, 0);
-
   useEffect(() => {
     if (window && window.Telegram) {
       setTelegramUser(window.Telegram.WebApp.initDataUnsafe.user); // temp fix until we fix the provider
