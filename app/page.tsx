@@ -43,11 +43,12 @@ export default function Home() {
 
   useEffect(() => {
     const tgApp = window.Telegram?.WebApp;
+    console.log(tgApp);
     if (tgApp) {
       tgApp.ready();
       setWebApp(tgApp);
       setData(tgApp.initData);
-
+      console.log(tgApp.initData);
       isRecent(tgApp.initData).then((isRecent) => {
         setRecent(isRecent);
       });
