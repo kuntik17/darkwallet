@@ -47,20 +47,17 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const [telegramUser, setTelegramUser] = useState<TelegramUser | null>(null);
 
   useEffect(() => {
-    if (window && window.Telegram) {
-      setTelegramUser(window.Telegram.WebApp.initDataUnsafe.user); // temp fix until we fix the provider
+    const tgApp = window.Telegram?.WebApp;
+    if (tgApp) {
+      console.log("tgApp", tgApp);
+      setTelegramUser(tgApp.initDataUnsafe.user); // temp fix until we fix the provider
       const telegramApp = window.Telegram.WebApp;
       console.log("Telegram App", telegramApp);
       telegramApp.expand();
       telegramApp.initDataUnsafe.user;
+      console.log("Telegram user 1: ", tgApp.initDataUnsafe.user);
     }
-    console.log("Telegram user 1: ", telegramUser);
-    if (telegramUser) {
-      console.log("Telegram user 2: ", telegramUser);
-      console.log("Telegram user id: ", telegramUser.id.toString());
-      handleTelegramResponse(telegramUser);
-    }
-  }, [telegramUser]);
+  }, []);
 
   useEffect(() => {
     const init = async () => {
