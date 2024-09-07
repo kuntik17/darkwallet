@@ -76,12 +76,9 @@ export default function Home() {
     const hash = urlParams.get("hash");
     urlParams.delete("hash");
     urlParams.sort();
-
-    let dataCheckString = "";
-    for (const [key, value] of urlParams.entries()) {
-      dataCheckString += `${key}=${value}\n`;
-    }
-    dataCheckString = dataCheckString.slice(0, -1);
+    let dataCheckString = Array.from(urlParams.entries())
+      .map(([key, value]) => `${key}=${value}`)
+      .join("\n");
 
     const encoder = new TextEncoder();
     const secretKey = await window.crypto.subtle.importKey("raw", encoder.encode("WebAppData"), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
