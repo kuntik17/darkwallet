@@ -59,29 +59,29 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
-  useEffect(() => {
-    const init = async () => {
-      try {
-        const ethProvider = window.ethereum;
-        if (!ethProvider) {
-          console.error("Ethereum provider not found");
-          return;
-        }
-        const eth_address = await ethProvider.enable({
-          method: "eth_requestAccounts",
-        });
-        if (eth_address.length > 0) {
-          setAddress(eth_address[0]);
-          const result = startLitClient();
-          setLit(result);
-          getMessages();
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    init();
-  }, []);
+  // useEffect(() => {
+  //   const init = async () => {
+  //     try {
+  //       const ethProvider = window.ethereum;
+  //       if (!ethProvider) {
+  //         console.error("Ethereum provider not found");
+  //         return;
+  //       }
+  //       const eth_address = await ethProvider.enable({
+  //         method: "eth_requestAccounts",
+  //       });
+  //       if (eth_address.length > 0) {
+  //         setAddress(eth_address[0]);
+  //         const result = startLitClient();
+  //         setLit(result);
+  //         getMessages();
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   init();
+  // }, []);
 
   const verifyTelegramUser = useCallback(async (user: TelegramUser): Promise<{ isValid: boolean; isRecent: boolean }> => {
     console.log("🔄 Validating user Telegram info client side...");
