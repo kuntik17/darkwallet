@@ -44,6 +44,25 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const [validationError, setValidationError] = useState<string | null>(null);
   const [mintedPkp, setMintedPkp] = useState<MintedPkp | null>(null);
   const [pkpSessionSigs, setPkpSessionSigs] = useState<PkpSessionSigs | null>(null);
+  const [telegramUser, setTelegramUser] = useState<TelegramUser | null>(null);
+
+  window.scrollTo(0, 0);
+
+  useEffect(() => {
+    if (window.Telegram) {
+      setTelegramUser(window.Telegram.WebApp.initDataUnsafe.user); // temp fix until we fix the provider
+      const telegramApp = window.Telegram.WebApp;
+      console.log("Telegram App", telegramApp);
+      telegramApp.expand();
+      telegramApp.initDataUnsafe.user;
+    }
+    console.log("Telegram user 1: ", telegramUser);
+    if (telegramUser) {
+      console.log("Telegram user 2: ", telegramUser);
+      console.log("Telegram user id: ", telegramUser.id.toString());
+      handleTelegramResponse(telegramUser);
+    }
+  }, [telegramUser]);
 
   useEffect(() => {
     const init = async () => {
