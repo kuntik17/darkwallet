@@ -119,18 +119,22 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
         console.log("minted", minted);
         setMintedPkp(minted!);
 
-        const { isValid, isRecent } = await verifyTelegramUser(user);
-        if (!isValid || !isRecent) {
-          setValidationError(!isValid ? "Failed to validate Telegram user info. Please try again." : "Authentication has expired. Please log in again.");
-        } else {
-          setValidationError(null);
-        }
+        const sessionSigs = await getPkpSessionSigs(user, minted!);
+        console.log(sessionSigs);
+        setPkpSessionSigs(sessionSigs);
+
+        // const { isValid, isRecent } = await verifyTelegramUser(user);
+        // if (!isValid || !isRecent) {
+        //   setValidationError(!isValid ? "Failed to validate Telegram user info. Please try again." : "Authentication has expired. Please log in again.");
+        // } else {
+        //   setValidationError(null);
+        // }
       } else {
         console.error("Invalid user data received:", user);
         setValidationError("Invalid user data received. Please try again.");
       }
     },
-    [verifyTelegramUser, setTgUser, setMintedPkp, setValidationError]
+    [setTgUser, setMintedPkp, setPkpSessionSigs, setValidationError]
   );
 
   const handleGetPkpSessionSigs = async () => {
