@@ -3,19 +3,8 @@ import TypingAnimation from "@/components/ui/typing";
 import { WavyBackground } from "@/components/ui/wavy-background";
 import { useEffect, useState } from "react";
 import { getSessionSignatures, connectToLitNodes, connectToLitContracts } from "@/lib/litConnections";
-import { MetaMaskProvider, useSDK } from "@metamask/sdk-react";
+import { MetaMaskSDK, useSDK } from "@metamask/sdk-react";
 import { useTelegram } from "@/context/TelegramProvider";
-
-const host = typeof window !== "undefined" ? window.location.host : "defaultHost";
-
-const sdkOptions = {
-  logging: { developerMode: false },
-  checkInstallationImmediately: false,
-  dappMetadata: {
-    name: "Next-Metamask-Boilerplate",
-    url: host, // using the host constant defined above
-  },
-};
 
 interface TelegramWebApp {
   ready: () => void;
@@ -40,6 +29,8 @@ export default function Home() {
     initData: string;
     initDataUnsafe: any;
   }
+
+  // You can also access via window.ethereum
 
   //const [webApp, setWebApp] = useState<TelegramWebApp | null>(null);
   const [account, setAccount] = useState<string | null>(null);
@@ -99,8 +90,16 @@ export default function Home() {
 
   const connect = async () => {
     try {
-      const accounts = await sdk?.connect();
-      setAccount(accounts?.[0]);
+      const MMSDK = new MetaMaskSDK({
+        dappMetadata: {
+          name: "Example JavaScript Dapp",
+          url: window.location.href,
+        },
+        infuraAPIKey: process.env.INFURA_API_KEY,
+      });
+      const ethereum = MMSDK.getProvider();
+      const accounts = await ethereum!.request({ method: "eth_requestAccounts", params: [] });
+
       console.log(accounts);
     } catch (err) {
       console.warn("failed to connect..", err);
@@ -123,11 +122,9 @@ export default function Home() {
       <WavyBackground className="flex flex-col justify-center items-center text-white">
         <TypingAnimation />
         <div className="flex gap-2">
-          <MetaMaskProvider debug={false} sdkOptions={sdkOptions}>
-            <button onClick={connect} className="mt-6 bg-amber-300 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg w-[219px] h-[40px] px-4 py-2">
-              Login with Wallet
-            </button>
-          </MetaMaskProvider>
+          <button onClick={connect} className="mt-6 bg-amber-300 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg w-[219px] h-[40px] px-4 py-2">
+            Login with Wallet
+          </button>
         </div>
       </WavyBackground>
     </main>
