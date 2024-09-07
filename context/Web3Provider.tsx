@@ -49,7 +49,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   window.scrollTo(0, 0);
 
   useEffect(() => {
-    if (window.Telegram) {
+    if (window && window.Telegram) {
       setTelegramUser(window.Telegram.WebApp.initDataUnsafe.user); // temp fix until we fix the provider
       const telegramApp = window.Telegram.WebApp;
       console.log("Telegram App", telegramApp);
