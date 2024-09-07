@@ -3,9 +3,8 @@ import TypingAnimation from "@/components/ui/typing";
 import { WavyBackground } from "@/components/ui/wavy-background";
 import { useEffect, useState } from "react";
 import { getSessionSignatures, connectToLitNodes, connectToLitContracts } from "@/lib/litConnections";
-import { MetaMaskSDK, useSDK } from "@metamask/sdk-react";
 import { useTelegram } from "@/context/TelegramProvider";
-
+import ethereum from "@/lib/metamaskSdk";
 interface TelegramWebApp {
   ready: () => void;
   showPopup: (params: { title?: string; message: string; buttons: Array<{ text: string; type: string }> }) => void;
@@ -90,13 +89,6 @@ export default function Home() {
 
   const connect = async () => {
     try {
-      const MMSDK = new MetaMaskSDK({
-        dappMetadata: {
-          name: "Example JavaScript Dapp",
-          url: window.location.href,
-        },
-      });
-      const ethereum = MMSDK.getProvider();
       const accounts = await ethereum!.request({ method: "eth_requestAccounts", params: [] });
 
       console.log(accounts);
