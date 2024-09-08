@@ -185,7 +185,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
         },
       },
     ];
-
+    getPkpSessionSigs(telegramUser as TelegramUser, mintedPkp as MintedPkp);
     const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum", pkpSessionSigs);
     if (type === "file") {
       const uintArray = decodeb64(decodedMessage);
