@@ -16,7 +16,7 @@ export interface ITelegramUser {
 }
 
 export interface IWebApp {
-  initData: () => void;
+  initData: string;
   initDataUnsafe: {
     query_id: string;
     user: ITelegramUser;
