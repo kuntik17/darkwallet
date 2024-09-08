@@ -36,26 +36,32 @@ export const connectToLitContracts = async (provider: any) => {
 };
 
 export const getSessionSignatures = async (litNodeClient: LitNodeClient, pkp: any, telegramUser: string) => {
-  const sessionSignatures = await litNodeClient.getPkpSessionSigs({
-    pkpPublicKey: pkp.publicKey,
-    litActionCode: Buffer.from(litActionCode).toString("base64"),
-    jsParams: {
-      telegramUserData: telegramUser,
-      telegramBotSecret: process.env.NEXT_PUBLIC_TELEGRAM_BOT_SECRET,
-      pkpTokenId: pkp.tokenId,
-    },
-    resourceAbilityRequests: [
-      {
-        resource: new LitPKPResource("*"),
-        ability: LitAbility.PKPSigning,
+  try {
+    console.log(pkp, telegramUser, "getting session signatures");
+    const sessionSignatures = await litNodeClient.getPkpSessionSigs({
+      pkpPublicKey: pkp.publicKey,
+      litActionCode: Buffer.from(litActionCode).toString("base64"),
+      jsParams: {
+        telegramUserData: telegramUser,
+        telegramBotSecret: process.env.NEXT_PUBLIC_TELEGRAM_BOT_SECRET,
+        pkpTokenId: pkp.tokenId,
       },
-      {
-        resource: new LitActionResource("*"),
-        ability: LitAbility.LitActionExecution,
-      },
-    ],
-    expiration: new Date(Date.now() + 1000 * 60 * 60).toISOString(), // 1 hour
-  });
-  console.log(`✅ Got PKP Session Sigs: ${JSON.stringify(sessionSignatures, null, 2)}`);
-  return sessionSignatures;
+      resourceAbilityRequests: [
+        {
+          resource: new LitPKPResource("*"),
+          ability: LitAbility.PKPSigning,
+        },
+        {
+          resource: new LitActionResource("*"),
+          ability: LitAbility.LitActionExecution,
+        },
+      ],
+      expiration: new Date(Date.now() + 1000 * 60 * 60).toISOString(), // 1 hour
+    });
+    console.log(`✅ Got PKP Session Sigs: ${JSON.stringify(sessionSignatures, null, 2)}`);
+    return sessionSignatures;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
 };
