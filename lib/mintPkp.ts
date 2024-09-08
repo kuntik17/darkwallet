@@ -8,8 +8,8 @@ import IpfsHash from "ipfs-only-hash";
 import { type TelegramUser } from "@/types/types";
 import { litActionCode } from "./litAction";
 
-export const mintPkp = async (telegramUser: TelegramUser) => {
-  console.log("mintPkp", telegramUser);
+export const mintPkp = async (telegramUserId: string) => {
+  console.log("mintPkp", telegramUserId);
   try {
     console.log("🔄 Connecting to Ethereum account...");
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -27,7 +27,7 @@ export const mintPkp = async (telegramUser: TelegramUser) => {
 
     console.log("🔄 Generating Auth Method type and ID...");
     const authMethodType = ethers.utils.keccak256(ethers.utils.toUtf8Bytes("Lit Developer Guide Telegram Auth Example"));
-    const authMethodId = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(`telegram:${telegramUser.id}`));
+    const authMethodId = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(`telegram:${telegramUserId}`));
     console.log("✅ Generated Auth Method type and ID");
 
     console.log("🔄 Getting PKP mint cost...");
