@@ -168,11 +168,8 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const login = async () => {
     const accounts = await sdk?.connect();
     setAddress(accounts?.[0]);
-    // const result = startLitClient();
-    // setLit(result);
-    if (webApp) {
-      setData(webApp.initData);
-    }
+    const result = startLitClient();
+    setLit(result);
     router.push("/dashboard");
   };
 

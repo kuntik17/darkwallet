@@ -13,7 +13,7 @@ export default function Dashboard() {
   const [data, setData] = useState<any>(null);
   const [openView, setOpenView] = useState(false);
 
-  const { hideMessage, messages, viewMessage } = useWeb3();
+  const { hideMessage, messages, viewMessage, mint } = useWeb3();
 
   const handleForm = (formData: any) => {
     if (formData.type === "text") {
@@ -59,6 +59,13 @@ export default function Dashboard() {
                 onClick={() => setOpen(true)}
               >
                 Add data
+              </button>
+              <button
+                type="button"
+                className="relative text-black inline-flex items-center rounded-md bg-amber-300 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-cyan-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cyan-500"
+                onClick={mint}
+              >
+                Mint
               </button>
             </div>
           </div>

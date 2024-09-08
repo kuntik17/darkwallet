@@ -21,7 +21,7 @@ declare global {
 }
 
 export default function Home() {
-  const { login, mint } = useWeb3();
+  const { login } = useWeb3();
   const { user, webApp } = useTelegram();
   const [telegram, setTelegram] = useState<boolean>(false);
 
@@ -29,7 +29,6 @@ export default function Home() {
     if (user && webApp) {
       webApp.expand();
       setTelegram(true);
-      mint();
     } else {
       setTelegram(false);
     }
