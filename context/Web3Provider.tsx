@@ -168,14 +168,13 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const login = async () => {
     const accounts = await sdk?.connect();
     setAddress(accounts?.[0]);
-    const result = startLitClient();
-    setLit(result);
+    // const result = startLitClient();
+    // setLit(result);
     router.push("/dashboard");
   };
 
   const mint = async () => {
     console.log("minting data");
-
     const pkp = await connectToLitContracts(provider);
     console.log(pkp);
     setMintedPkp(pkp);
