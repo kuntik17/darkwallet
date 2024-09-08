@@ -199,19 +199,20 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     const litNodeClient = await connectToLitNodes();
     const result = await getSessionSignatures(litNodeClient, mintedPkp as MintedPkp, user?.id.toString() as string);
     console.log(result);
-    // getPkpSessionSigs(telegramUser as TelegramUser, mintedPkp as MintedPkp);
-    const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum", result as any);
-    if (type === "file") {
-      const uintArray = decodeb64(decodedMessage);
-      const blob = new Blob([uintArray], { type: "image/png" });
 
-      if (blob instanceof Blob) {
-        const blobUrl = URL.createObjectURL(blob);
-        setImage(blobUrl);
-      }
-    }
+    // const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum");
+    // if (type === "file") {
+    //   const uintArray = decodeb64(decodedMessage);
+    //   const blob = new Blob([uintArray], { type: "image/png" });
 
-    return decodedMessage;
+    //   if (blob instanceof Blob) {
+    //     const blobUrl = URL.createObjectURL(blob);
+    //     setImage(blobUrl);
+    //   }
+    // }
+
+    // return decodedMessage;
+    return null;
   };
 
   const hideMessage = async (title: string, newMessage: string, type: string) => {

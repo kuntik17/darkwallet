@@ -54,13 +54,12 @@ export async function decryptWithLit(
   ciphertext: string,
   dataToEncryptHash: string,
   accessControlConditions: AccessControlConditions,
-  chain: string,
-  authSig: AuthSig
+  chain: string
 ): Promise<string> {
-  // let authSig = await checkAndSignAuthMessage({
-  //   chain,
-  //   nonce: Date.now().toString(),
-  // });
+  let authSig = await checkAndSignAuthMessage({
+    chain,
+    nonce: Date.now().toString(),
+  });
 
   const decryptedString = await LitJsSdk.decryptToString(
     {
