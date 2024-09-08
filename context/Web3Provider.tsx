@@ -13,6 +13,7 @@ import { mintPkp } from "@/lib/mintPkp";
 import { getPkpSessionSigs } from "@/lib/getPkpSessionSigs";
 import { useSDK } from "@metamask/sdk-react";
 import { connectToLitContracts, getSessionSignatures, connectToLitNodes } from "@/lib/litConnections";
+import { useTelegram } from "./TelegramProvider";
 
 type MintedPkp = {
   tokenId: string;
@@ -38,6 +39,7 @@ export const Web3Context = createContext<Web3ContextType | undefined>(undefined)
 export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const { sdk, provider } = useSDK();
+  const { user } = useTelegram();
   const [lit, setLit] = useState<ILitNodeClient | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
@@ -190,7 +192,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     ];
 
     const litNodeClient = await connectToLitNodes();
-    const result = await getSessionSignatures(litNodeClient, mintedPkp as MintedPkp, telegramUser?.id.toString() as string);
+    const result = await getSessionSignatures(litNodeClient, mintedPkp as MintedPkp, user?.id.toString() as string);
     console.log(result);
     // getPkpSessionSigs(telegramUser as TelegramUser, mintedPkp as MintedPkp);
     const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum", result as any);
