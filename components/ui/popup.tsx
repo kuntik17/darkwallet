@@ -26,7 +26,6 @@ export default function Popup({ open, setOpen, handleForm }: { open: boolean; se
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
-
     setFormData((prevData) => ({
       ...prevData,
       file: file,
@@ -38,12 +37,12 @@ export default function Popup({ open, setOpen, handleForm }: { open: boolean; se
     handleForm(formData);
   };
 
-  // const handleInputTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     type: e.target.value as "text" | "file",
-  //   }));
-  // };
+  const handleInputTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      type: e.target.value as "text" | "file",
+    }));
+  };
 
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -53,7 +52,7 @@ export default function Popup({ open, setOpen, handleForm }: { open: boolean; se
       />
 
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div className="fixed inset-0 flex items-center justify-center p-4">
           <DialogPanel
             transition
             className="relative transform overflow-hidden rounded-lg bg-black px-4 pb-4 pt-5 text-left shadow-xl transition-all data-[closed]:translate-y-4 data-[closed]:opacity-0 data-[enter]:duration-300 data-[leave]:duration-200 data-[enter]:ease-out data-[leave]:ease-in sm:my-8 sm:w-full sm:max-w-sm sm:p-6 data-[closed]:sm:translate-y-0 data-[closed]:sm:scale-95"
@@ -66,7 +65,7 @@ export default function Popup({ open, setOpen, handleForm }: { open: boolean; se
 
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                       <div className="col-span-full">
-                        {/* <fieldset>
+                        <fieldset>
                           <legend className="block text-sm font-medium leading-6 text-gray-400">Secret Type</legend>
                           <div className="mt-4  flex flex-row gap-2">
                             <div className="flex items-center">
@@ -98,7 +97,7 @@ export default function Popup({ open, setOpen, handleForm }: { open: boolean; se
                               </label>
                             </div>
                           </div>
-                        </fieldset> */}
+                        </fieldset>
                       </div>
 
                       {formData.type === "text" && (
@@ -155,7 +154,7 @@ export default function Popup({ open, setOpen, handleForm }: { open: boolean; se
                                   className="relative cursor-pointer rounded-md bg-gray-900 font-semibold text-amber-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-amber-200 focus-within:ring-offset-2 focus-within:ring-offset-gray-900 hover:text-indigo-500"
                                 >
                                   <span>Upload a file</span>
-                                  <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleFileChange} />
+                                  <input id="file-upload" name="file-upload" type="file" accept="image/png" className="sr-only" onChange={handleFileChange} />
                                 </label>
                                 <p className="pl-1">or drag and drop</p>
                               </div>

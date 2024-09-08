@@ -1,6 +1,6 @@
 import * as LitJsSdk from "@lit-protocol/lit-node-client-nodejs";
-import { checkAndSignAuthMessage } from "@lit-protocol/lit-node-client";
-import { AccessControlConditions, ILitNodeClient } from "@lit-protocol/types";
+import { checkAndSignAuthMessage, ethConnect } from "@lit-protocol/lit-node-client";
+import { AccessControlConditions, AuthSig, ILitNodeClient } from "@lit-protocol/types";
 
 declare global {
   interface Window {
@@ -9,24 +9,32 @@ declare global {
 }
 
 export function encodeb64(uintarray: any) {
-  const b64 = Buffer.from(uintarray).toString("base64");
+  const b64 = btoa(uintarray);
   return b64;
 }
 
 export function blobToBase64(blob: Blob) {
   return new Promise((resolve, _) => {
     const reader = new FileReader();
-    reader.onloadend = () =>
-      resolve(
-        // @ts-ignore
-        reader.result.replace("data:application/octet-stream;base64,", "")
-      );
+    reader.onloadend = () => {
+      const result = reader.result as string;
+      const base64Data = result.replace(/^data:(.*?);base64,/, "");
+      resolve(base64Data);
+    };
     reader.readAsDataURL(blob);
   });
 }
 
-export function decodeb64(b64String: any) {
-  return new Uint8Array(Buffer.from(b64String, "base64"));
+export function decodeb64(base64: string) {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const uintArray = new Uint8Array(len);
+
+  for (let i = 0; i < len; i++) {
+    uintArray[i] = binaryString.charCodeAt(i);
+  }
+
+  return uintArray;
 }
 
 export async function encryptWithLit(
@@ -56,6 +64,7 @@ export async function decryptWithLit(
   accessControlConditions: AccessControlConditions,
   chain: string
 ): Promise<string> {
+  ethConnect.disconnectWeb3();
   let authSig = await checkAndSignAuthMessage({
     chain,
     nonce: Date.now().toString(),

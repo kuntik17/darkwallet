@@ -9,7 +9,6 @@ const _litActionCode = async () => {
 
   try {
     const _telegramUserData = JSON.parse(telegramUserData);
-
     // Validating the Telegram user data, go here to learn more:
     // https://core.telegram.org/widgets/login#checking-authorization
     const { hash, ...otherData } = _telegramUserData;
