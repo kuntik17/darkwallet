@@ -60,7 +60,7 @@ export async function decryptWithLit(
     chain,
     nonce: Date.now().toString(),
   });
-  console.log(authSig);
+  console.log(authSig.sig);
   const decryptedString = await LitJsSdk.decryptToString(
     {
       accessControlConditions,

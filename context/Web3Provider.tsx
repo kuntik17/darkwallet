@@ -119,8 +119,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
         },
       },
     ];
-    console.log(address);
-    console.log(lit);
+
     const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum");
     // if (type === "file") {
     //   const uintArray = decodeb64(decodedMessage);
