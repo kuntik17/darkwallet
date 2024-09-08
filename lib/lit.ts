@@ -57,6 +57,7 @@ export async function decryptWithLit(
   chain: string
 ): Promise<string> {
   ethConnect.disconnectWeb3();
+
   let authSig = await checkAndSignAuthMessage({
     chain,
     nonce: Date.now().toString(),

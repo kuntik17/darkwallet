@@ -78,6 +78,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   }, [address, setMessages]);
 
   const login = async () => {
+    LitJsSdk.ethConnect.connectWeb3({ chainId: 175188, walletConnectProjectId: "3a120de6b0443ebe60abda85978fd756" });
     const accounts = await sdk?.connect();
     setAddress(accounts?.[0]);
     const result = startLitClient();
