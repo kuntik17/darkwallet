@@ -51,6 +51,9 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const [pkpSessionSigs, setPkpSessionSigs] = useState<PkpSessionSigs | null>(null);
   const [telegramUser, setTelegramUser] = useState<TelegramUser | null>(null);
   const [data, setData] = useState<any>(null);
+  const [recent, setRecent] = useState<boolean>(false);
+  const [valid, setValid] = useState<boolean>(false);
+  const [sessionSignatures, setSessionSignatures] = useState<PkpSessionSigs | null>(null);
 
   useEffect(() => {
     const init = async () => {
@@ -169,56 +172,20 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     // setLit(result);
     if (webApp) {
       setData(webApp.initData);
-      console.log(webApp.initData);
-      isRecent(webApp.initData).then((isRecent) => {
-        console.log(isRecent);
-      });
     }
     router.push("/dashboard");
   };
 
-  async function isRecent(telegramInitData: string) {
-    const urlParams: URLSearchParams = new URLSearchParams(telegramInitData);
-    const auth_date = Number(urlParams.get("auth_date"));
-    const isRecent = Date.now() / 1000 - auth_date < 600;
-    return isRecent;
-  }
-
-  async function verifyInitData(telegramInitData: string, botToken: string) {
-    const urlParams: URLSearchParams = new URLSearchParams(telegramInitData);
-
-    const hash = urlParams.get("hash");
-    urlParams.delete("hash");
-    urlParams.sort();
-    let dataCheckString = "";
-    for (const entry of Array.from(urlParams.entries())) {
-      const [key, value] = entry;
-      dataCheckString += `${key}=${value}\n`;
-    }
-    dataCheckString = dataCheckString.slice(0, -1);
-
-    const encoder = new TextEncoder();
-    const secretKey = await window.crypto.subtle.importKey("raw", encoder.encode("WebAppData"), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-
-    const botTokenKey = await window.crypto.subtle.sign("HMAC", secretKey, encoder.encode(botToken));
-
-    const calculatedHash = await window.crypto.subtle.sign(
-      "HMAC",
-      await window.crypto.subtle.importKey("raw", botTokenKey, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]),
-      encoder.encode(dataCheckString)
-    );
-
-    const calculatedHashHex = Array.from(new Uint8Array(calculatedHash))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-
-    const isVerified = hash === calculatedHashHex;
-    return isVerified;
-  }
-
   const mint = async () => {
-    const litContracts = await connectToLitContracts(provider);
-    setMintedPkp(litContracts);
+    const pkp = await connectToLitContracts(provider);
+    setMintedPkp(pkp);
+  };
+
+  const getSS = async () => {
+    const litNodeClient = await connectToLitNodes();
+    const sessionSignatures = await getSessionSignatures(litNodeClient, mintedPkp as MintedPkp, data);
+    console.log(sessionSignatures);
+    setSessionSignatures(sessionSignatures);
   };
 
   const startLitClient = (): ILitNodeClient => {
@@ -245,8 +212,9 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     // const litNodeClient = await connectToLitNodes();
     // const result = await getSessionSignatures(litNodeClient, mintedPkp as MintedPkp, user?.id.toString() as string);
     // console.log(result);
-    const sig = await getPkpSessionSigs(user as unknown as TelegramUser, mintedPkp as any);
-    console.log(sig);
+    // const sig = await getPkpSessionSigs(user as unknown as TelegramUser, mintedPkp as any);
+    // console.log(sig);
+    getSS();
     // const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum");
     // if (type === "file") {
     //   const uintArray = decodeb64(decodedMessage);
