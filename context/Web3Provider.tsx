@@ -174,7 +174,6 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const login = async () => {
     const accounts = await sdk?.connect();
     setAddress(accounts?.[0]);
-
     const result = startLitClient();
     setLit(result);
     console.log(provider);
