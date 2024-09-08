@@ -40,10 +40,6 @@ export default function Home() {
   const [telegram, setTelegram] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("user", user);
-    console.log("webApp", webApp);
-    console.log("connected", connected);
-    console.log("provider", provider);
     if (user && webApp) {
       webApp.expand();
       setTelegram(true);
@@ -98,6 +94,7 @@ export default function Home() {
   };
 
   const mintPkp = async () => {
+    console.log("minting pkp");
     const pkp = await connectToLitContracts(provider);
     console.log("pkp", pkp);
     setPkp(pkp);
