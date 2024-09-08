@@ -37,20 +37,12 @@ export const connectToLitContracts = async (provider: any) => {
 
 export const getSessionSignatures = async (litNodeClient: LitNodeClient, pkp: any, telegramUser: string) => {
   try {
-    console.log(litActionCode);
-    console.log(pkp.publicKey);
-    console.log(Buffer.from(litActionCode).toString("base64"));
-    console.log({
-      telegramUserData: telegramUser,
-      telegramBotSecret: process.env.NEXT_PUBLIC_TELEGRAM_BOT_SECRET,
-      pkpTokenId: pkp.tokenId,
-    });
     const sessionSignatures = await litNodeClient.getPkpSessionSigs({
       pkpPublicKey: pkp.publicKey,
       litActionCode: Buffer.from(litActionCode).toString("base64"),
       jsParams: {
         telegramUserData: telegramUser,
-        telegramBotSecret: process.env.NEXT_PUBLIC_TELEGRAM_BOT_SECRET,
+        telegramBotSecret: "7526831514:AAGBKD5tLaTsocnuddipaobSNBRAmk_-6BQ",
         pkpTokenId: pkp.tokenId,
       },
       resourceAbilityRequests: [
