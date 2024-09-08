@@ -44,7 +44,6 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const [messages, setMessages] = useState<any[]>([]);
   const [image, setImage] = useState<string | null>(null);
   const [tgUser, setTgUser] = useState<TelegramUser | null>(null);
-  const [validationError, setValidationError] = useState<string | null>(null);
   const [mintedPkp, setMintedPkp] = useState<MintedPkp | null>(null);
   const [data, setData] = useState<any>(null);
   const [sessionSignatures, setSessionSignatures] = useState<PkpSessionSigs | null>(null);
@@ -120,6 +119,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
         },
       },
     ];
+    console.log(address);
     console.log(lit);
     const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum");
     // if (type === "file") {
