@@ -28,7 +28,6 @@ type Web3ContextType = {
   messages: any[];
   image: string | null;
   setTgUser: (tgUser: TelegramUser) => void;
-  handleTelegramResponse: (tgUser: TelegramUser) => void;
 };
 
 // Create a new context for the Web3 provider
@@ -93,7 +92,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const handleMintPkp = async () => {
     if (tgUser) {
       try {
-        const minted = await mintPkp(tgUser);
+        const minted = await mintPkp(tgUser.id.toString());
         console.log("minted", minted);
         setMintedPkp(minted!);
         console.log(minted);
@@ -104,33 +103,33 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const handleTelegramResponse = useCallback(
-    async (user: TelegramUser) => {
-      console.log("Telegram auth response received:", user);
-      if (user && typeof user === "object") {
-        setTgUser(user);
+  // const handleTelegramResponse = useCallback(
+  //   async (user: TelegramUser) => {
+  //     console.log("Telegram auth response received:", user);
+  //     if (user && typeof user === "object") {
+  //       setTgUser(user);
 
-        const minted = await mintPkp(user);
-        console.log("minted", minted);
-        setMintedPkp(minted!);
+  //       const minted = await mintPkp(user);
+  //       console.log("minted", minted);
+  //       setMintedPkp(minted!);
 
-        const sessionSigs = await getPkpSessionSigs(user, minted!);
-        console.log(sessionSigs);
-        setPkpSessionSigs(sessionSigs);
+  //       const sessionSigs = await getPkpSessionSigs(user, minted!);
+  //       console.log(sessionSigs);
+  //       setPkpSessionSigs(sessionSigs);
 
-        // const { isValid, isRecent } = await verifyTelegramUser(user);
-        // if (!isValid || !isRecent) {
-        //   setValidationError(!isValid ? "Failed to validate Telegram user info. Please try again." : "Authentication has expired. Please log in again.");
-        // } else {
-        //   setValidationError(null);
-        // }
-      } else {
-        console.error("Invalid user data received:", user);
-        setValidationError("Invalid user data received. Please try again.");
-      }
-    },
-    [setTgUser, setMintedPkp, setPkpSessionSigs, setValidationError]
-  );
+  //       // const { isValid, isRecent } = await verifyTelegramUser(user);
+  //       // if (!isValid || !isRecent) {
+  //       //   setValidationError(!isValid ? "Failed to validate Telegram user info. Please try again." : "Authentication has expired. Please log in again.");
+  //       // } else {
+  //       //   setValidationError(null);
+  //       // }
+  //     } else {
+  //       console.error("Invalid user data received:", user);
+  //       setValidationError("Invalid user data received. Please try again.");
+  //     }
+  //   },
+  //   [setTgUser, setMintedPkp, setPkpSessionSigs, setValidationError]
+  // );
 
   const handleGetPkpSessionSigs = async () => {
     if (tgUser && mintedPkp) {
@@ -240,7 +239,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     getMessages();
   }, [address, getMessages]);
 
-  return <Web3Context.Provider value={{ login, address, hideMessage, viewMessage, messages, image, setTgUser, handleTelegramResponse }}>{children}</Web3Context.Provider>;
+  return <Web3Context.Provider value={{ login, address, hideMessage, viewMessage, messages, image, setTgUser }}>{children}</Web3Context.Provider>;
 };
 
 export const useWeb3 = () => {
