@@ -9,12 +9,9 @@ import { encryptWithLit, decryptWithLit, decodeb64 } from "@/lib/lit";
 import supabase from "@/lib/supabase";
 
 import { TelegramUser } from "@/types/types";
-import { mintPkp } from "@/lib/mintPkp";
-import { getPkpSessionSigs } from "@/lib/getPkpSessionSigs";
 import { useSDK } from "@metamask/sdk-react";
 import { connectToLitContracts, getSessionSignatures, connectToLitNodes } from "@/lib/litConnections";
 import { useTelegram } from "./TelegramProvider";
-import { init } from "next/dist/compiled/webpack/webpack";
 
 type MintedPkp = {
   tokenId: string;
@@ -41,7 +38,7 @@ export const Web3Context = createContext<Web3ContextType | undefined>(undefined)
 export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const { sdk, provider } = useSDK();
-  const { user, webApp, initData } = useTelegram();
+  const { initData } = useTelegram();
   const [lit, setLit] = useState<ILitNodeClient | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
@@ -49,11 +46,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const [tgUser, setTgUser] = useState<TelegramUser | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [mintedPkp, setMintedPkp] = useState<MintedPkp | null>(null);
-  const [pkpSessionSigs, setPkpSessionSigs] = useState<PkpSessionSigs | null>(null);
-  const [telegramUser, setTelegramUser] = useState<TelegramUser | null>(null);
   const [data, setData] = useState<any>(null);
-  const [recent, setRecent] = useState<boolean>(false);
-  const [valid, setValid] = useState<boolean>(false);
   const [sessionSignatures, setSessionSignatures] = useState<PkpSessionSigs | null>(null);
 
   useEffect(() => {
@@ -100,10 +93,9 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   };
 
   const getSS = async () => {
-    // const litNodeClient = await connectToLitNodes();
-    // const sessionSignatures = await getSessionSignatures(litNodeClient, mintedPkp as MintedPkp, data);
-    // console.log(sessionSignatures);
-    const ses = await getPkpSessionSigs(initData as any, mintedPkp as MintedPkp);
+    const litNodeClient = await connectToLitNodes();
+    const sessionSignatures = await getSessionSignatures(litNodeClient, mintedPkp as MintedPkp, data);
+    console.log(sessionSignatures);
     setSessionSignatures(sessionSignatures);
   };
 
@@ -128,13 +120,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
       },
     ];
 
-    // const litNodeClient = await connectToLitNodes();
-    // const result = await getSessionSignatures(litNodeClient, mintedPkp as MintedPkp, user?.id.toString() as string);
-    // console.log(result);
-    // const sig = await getPkpSessionSigs(user as unknown as TelegramUser, mintedPkp as any);
-    // console.log(sig);
-    getSS();
-    // const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum");
+    const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum");
     // if (type === "file") {
     //   const uintArray = decodeb64(decodedMessage);
     //   const blob = new Blob([uintArray], { type: "image/png" });
@@ -145,8 +131,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     //   }
     // }
 
-    // return decodedMessage;
-    return null;
+    return decodedMessage;
   };
 
   const hideMessage = async (title: string, newMessage: string, type: string) => {

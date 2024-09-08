@@ -3,7 +3,6 @@ import TypingAnimation from "@/components/ui/typing";
 import { WavyBackground } from "@/components/ui/wavy-background";
 import { useEffect, useState } from "react";
 import { useTelegram } from "@/context/TelegramProvider";
-import { useSDK } from "@metamask/sdk-react";
 import { useWeb3 } from "@/context/Web3Provider";
 interface TelegramWebApp {
   ready: () => void;
