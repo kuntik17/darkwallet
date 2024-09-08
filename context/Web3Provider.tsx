@@ -11,6 +11,7 @@ import supabase from "@/lib/supabase";
 import { TelegramUser } from "@/types/types";
 import { mintPkp } from "@/lib/mintPkp";
 import { getPkpSessionSigs } from "@/lib/getPkpSessionSigs";
+import { useSDK } from "@metamask/sdk-react";
 
 type MintedPkp = {
   tokenId: string;
@@ -36,6 +37,7 @@ export const Web3Context = createContext<Web3ContextType | undefined>(undefined)
 // Create a Web3 provider component
 export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
+  const { sdk, provider } = useSDK();
   const [lit, setLit] = useState<ILitNodeClient | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
@@ -59,29 +61,21 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   //   }
   // }, []);
 
-  // useEffect(() => {
-  //   const init = async () => {
-  //     try {
-  //       const ethProvider = window.ethereum;
-  //       if (!ethProvider) {
-  //         console.error("Ethereum provider not found");
-  //         return;
-  //       }
-  //       const eth_address = await ethProvider.enable({
-  //         method: "eth_requestAccounts",
-  //       });
-  //       if (eth_address.length > 0) {
-  //         setAddress(eth_address[0]);
-  //         const result = startLitClient();
-  //         setLit(result);
-  //         getMessages();
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
-  //   init();
-  // }, []);
+  useEffect(() => {
+    const init = async () => {
+      try {
+        if (!provider) {
+          console.error("Ethereum provider not found");
+          router.push("/");
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+        router.push("/");
+      }
+    };
+    init();
+  }, []);
 
   const verifyTelegramUser = useCallback(async (user: TelegramUser): Promise<{ isValid: boolean; isRecent: boolean }> => {
     console.log("🔄 Validating user Telegram info client side...");
@@ -164,8 +158,8 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const getMessages = async () => {
-    const { data, error } = await supabase.from("secrets").select("*");
+  const getMessages = useCallback(async () => {
+    const { data, error } = await supabase.from("secrets").select("*").eq("wallet", address);
     if (error) {
       console.error(error);
       return;
@@ -175,16 +169,15 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     } else {
       setMessages([]);
     }
-  };
+  }, [address, setMessages]);
 
   const login = async () => {
-    const ethProvider = window.ethereum;
-    const eth_address = await ethProvider.enable({
-      method: "eth_requestAccounts",
-    });
-    setAddress(eth_address[0]);
+    const accounts = await sdk?.connect();
+    setAddress(accounts?.[0]);
+
     const result = startLitClient();
     setLit(result);
+    console.log(provider);
     router.push("/dashboard");
   };
 
@@ -204,7 +197,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
         parameters: [":userAddress"],
         returnValueTest: {
           comparator: "=",
-          value: tgUser?.id,
+          value: address,
         },
       },
     ];
@@ -234,7 +227,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
           parameters: [":userAddress"],
           returnValueTest: {
             comparator: "=",
-            value: tgUser?.id,
+            value: address,
           },
         },
       ];
@@ -257,6 +250,10 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
       getMessages();
     }
   };
+
+  useEffect(() => {
+    getMessages();
+  }, [address, getMessages]);
 
   return <Web3Context.Provider value={{ login, address, hideMessage, viewMessage, messages, image, setTgUser, handleTelegramResponse }}>{children}</Web3Context.Provider>;
 };

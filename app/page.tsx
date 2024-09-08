@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getSessionSignatures, connectToLitNodes, connectToLitContracts } from "@/lib/litConnections";
 import { useTelegram } from "@/context/TelegramProvider";
 import { useSDK } from "@metamask/sdk-react";
+import { useWeb3 } from "@/context/Web3Provider";
 interface TelegramWebApp {
   ready: () => void;
   showPopup: (params: { title?: string; message: string; buttons: Array<{ text: string; type: string }> }) => void;
@@ -22,7 +23,8 @@ declare global {
 
 export default function Home() {
   const { user, webApp } = useTelegram();
-  const { sdk, connected, /*connecting, */ provider /*chainId*/ } = useSDK();
+  const { sdk, connected, provider } = useSDK();
+  const { login } = useWeb3();
   interface TelegramWebApp {
     ready: () => void;
     showPopup: (params: { title?: string; message: string; buttons: Array<{ text: string; type: string }> }) => void;
@@ -44,13 +46,19 @@ export default function Home() {
   const [valid, setValid] = useState<boolean | null>(null);
   const [recent, setRecent] = useState<boolean | null>(null);
   const [data, setData] = useState<any | null>(null);
+  const [telegram, setTelegram] = useState<boolean>(false);
 
   useEffect(() => {
     if (user && webApp) {
       webApp.expand();
-      console.log(user);
+      setTelegram(true);
+      if (connected && provider) {
+        mintPkp();
+      }
+    } else {
+      setTelegram(false);
     }
-  }, [webApp, user]);
+  }, [webApp, user, provider, connected]);
 
   async function isRecent(telegramInitData: string) {
     const urlParams: URLSearchParams = new URLSearchParams(telegramInitData);
@@ -88,36 +96,35 @@ export default function Home() {
     return isVerified;
   }
 
-  const connect = async () => {
-    try {
-      const accounts = await sdk?.connect();
-      console.log(accounts);
-      setAccount(accounts?.[0]);
-    } catch (err) {
-      console.warn("failed to connect..", err);
-    }
-  };
-
   const getSS = async () => {
     const litNodeClient = await connectToLitNodes();
     const sessionSignatures = await getSessionSignatures(litNodeClient, pkp, data);
     setSessionSignatures(sessionSignatures);
   };
 
-  // const mintPkp = async () => {
-  //   const pkp = await connectToLitContracts(provider);
-  //   setPkp(pkp);
-  // };
+  const mintPkp = async () => {
+    const pkp = await connectToLitContracts(provider);
+    console.log("pkp", pkp);
+    setPkp(pkp);
+  };
 
   return (
     <main className="h-[100vh] flex justify-center items-center bg-black">
       <WavyBackground className="flex flex-col justify-center items-center text-white">
         <TypingAnimation />
-        <div className="flex gap-2">
-          <button onClick={connect} className="mt-6 bg-amber-300 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg w-[219px] h-[40px] px-4 py-2">
-            Login with Wallet
-          </button>
-        </div>
+        {telegram ? (
+          <div className="flex gap-2">
+            <button onClick={login} className="mt-6 bg-amber-300 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg w-[219px] h-[40px] px-4 py-2">
+              Login with Wallet
+            </button>
+          </div>
+        ) : (
+          <div>
+            <button className="mt-6 bg-amber-300 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold rounded-lg w-[219px] h-[40px] px-4 py-2">
+              Open app in Telegram
+            </button>
+          </div>
+        )}
       </WavyBackground>
     </main>
   );

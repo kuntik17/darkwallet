@@ -18,7 +18,7 @@ export default function RootLayout({
         sdkOptions={{
           dappMetadata: {
             name: "Dark Wallet",
-            url: "https://darkwallet-vmrt.vercel.app/",
+            url: "http://localhost:3000/",
           },
         }}
       >
