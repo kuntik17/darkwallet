@@ -78,7 +78,6 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   }, [address, setMessages]);
 
   const login = async () => {
-    LitJsSdk.ethConnect.connectWeb3({ chainId: 175188, walletConnectProjectId: "3a120de6b0443ebe60abda85978fd756" });
     const accounts = await sdk?.connect();
     setAddress(accounts?.[0]);
     const result = startLitClient();
@@ -121,7 +120,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
       },
     ];
 
-    const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum");
+    const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum", sdk);
     // if (type === "file") {
     //   const uintArray = decodeb64(decodedMessage);
     //   const blob = new Blob([uintArray], { type: "image/png" });

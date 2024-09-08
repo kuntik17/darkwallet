@@ -54,10 +54,11 @@ export async function decryptWithLit(
   ciphertext: string,
   dataToEncryptHash: string,
   accessControlConditions: AccessControlConditions,
-  chain: string
+  chain: string,
+  sdk: any
 ): Promise<string> {
   ethConnect.disconnectWeb3();
-
+  await sdk?.connect();
   let authSig = await checkAndSignAuthMessage({
     chain,
     nonce: Date.now().toString(),
