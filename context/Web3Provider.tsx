@@ -27,7 +27,6 @@ type Web3ContextType = {
   viewMessage: (ciphertext: string, dataToEncryptHash: string, type: string) => void;
   messages: any[];
   image: string | null;
-  setTgUser: (tgUser: TelegramUser) => void;
   mint: () => void;
 };
 
@@ -43,7 +42,6 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const [address, setAddress] = useState<string | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
   const [image, setImage] = useState<string | null>(null);
-  const [tgUser, setTgUser] = useState<TelegramUser | null>(null);
   const [mintedPkp, setMintedPkp] = useState<MintedPkp | null>(null);
   const [data, setData] = useState<any>(null);
   const [sessionSignatures, setSessionSignatures] = useState<PkpSessionSigs | null>(null);
@@ -173,7 +171,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     getMessages();
   }, [address, getMessages]);
 
-  return <Web3Context.Provider value={{ login, mint, address, hideMessage, viewMessage, messages, image, setTgUser }}>{children}</Web3Context.Provider>;
+  return <Web3Context.Provider value={{ login, mint, address, hideMessage, viewMessage, messages, image }}>{children}</Web3Context.Provider>;
 };
 
 export const useWeb3 = () => {
