@@ -40,7 +40,7 @@ export const Web3Context = createContext<Web3ContextType | undefined>(undefined)
 export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const { sdk, provider } = useSDK();
-  const { user, webApp } = useTelegram();
+  const { user, webApp, initData } = useTelegram();
   const [lit, setLit] = useState<ILitNodeClient | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [messages, setMessages] = useState<any[]>([]);
@@ -177,6 +177,8 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   };
 
   const mint = async () => {
+    setData(initData);
+    console.log(initData);
     const pkp = await connectToLitContracts(provider);
     console.log(pkp);
     setMintedPkp(pkp);
