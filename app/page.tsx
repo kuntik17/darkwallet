@@ -2,13 +2,9 @@
 import TypingAnimation from "@/components/ui/typing";
 import { WavyBackground } from "@/components/ui/wavy-background";
 import { useEffect, useState } from "react";
-import { getSessionSignatures, connectToLitNodes, connectToLitContracts } from "@/lib/litConnections";
 import { useTelegram } from "@/context/TelegramProvider";
 import { useSDK } from "@metamask/sdk-react";
 import { useWeb3 } from "@/context/Web3Provider";
-import { mintPkp } from "@/lib/mintPkp";
-import { getPkpSessionSigs } from "@/lib/getPkpSessionSigs";
-import { TelegramUser } from "@/types/types";
 interface TelegramWebApp {
   ready: () => void;
   showPopup: (params: { title?: string; message: string; buttons: Array<{ text: string; type: string }> }) => void;
@@ -25,89 +21,20 @@ declare global {
 }
 
 export default function Home() {
+  const { login, mint } = useWeb3();
   const { user, webApp } = useTelegram();
-  const { sdk, connected, provider } = useSDK();
-  const { login } = useWeb3();
-
-  const [account, setAccount] = useState<string | null>(null);
-
-  const [pkp, setPkp] = useState<{
-    tokenId: any;
-    publicKey: string;
-    ethAddress: string;
-  } | null>(null);
-  const [sessionSignatures, setSessionSignatures] = useState<any | null>(null);
-  const [valid, setValid] = useState<boolean | null>(null);
-  const [recent, setRecent] = useState<boolean | null>(null);
-  const [data, setData] = useState<any | null>(null);
+  const { connected, provider } = useSDK();
   const [telegram, setTelegram] = useState<boolean>(false);
 
   useEffect(() => {
     if (user && webApp) {
       webApp.expand();
       setTelegram(true);
-      if (connected && provider) {
-        console.log(user);
-        mint(user.id.toString());
-      }
+      mint();
     } else {
       setTelegram(false);
     }
   }, [webApp, user, provider, connected]);
-
-  async function isRecent(telegramInitData: string) {
-    const urlParams: URLSearchParams = new URLSearchParams(telegramInitData);
-    const auth_date = Number(urlParams.get("auth_date"));
-    const isRecent = Date.now() / 1000 - auth_date < 600;
-    return isRecent;
-  }
-
-  async function verifyInitData(telegramInitData: string, botToken: string) {
-    const urlParams: URLSearchParams = new URLSearchParams(telegramInitData);
-
-    const hash = urlParams.get("hash");
-    urlParams.delete("hash");
-    urlParams.sort();
-    let dataCheckString = Array.from(urlParams.entries())
-      .map(([key, value]) => `${key}=${value}`)
-      .join("\n");
-
-    const encoder = new TextEncoder();
-    const secretKey = await window.crypto.subtle.importKey("raw", encoder.encode("WebAppData"), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-
-    const botTokenKey = await window.crypto.subtle.sign("HMAC", secretKey, encoder.encode(botToken));
-
-    const calculatedHash = await window.crypto.subtle.sign(
-      "HMAC",
-      await window.crypto.subtle.importKey("raw", botTokenKey, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]),
-      encoder.encode(dataCheckString)
-    );
-
-    const calculatedHashHex = Array.from(new Uint8Array(calculatedHash))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-
-    const isVerified = hash === calculatedHashHex;
-    return isVerified;
-  }
-
-  const getSS = async () => {
-    console.log("getting ss", pkp);
-    const litNodeClient = await connectToLitNodes();
-    const sessionSignatures = await getSessionSignatures(litNodeClient, pkp, data);
-    console.log("sessionSignatures", sessionSignatures);
-    setSessionSignatures(sessionSignatures);
-  };
-
-  const mint = async (id: string) => {
-    const pkp = await mintPkp(id);
-    setPkp(pkp as any);
-  };
-
-  const getPkp = async () => {
-    const ses = await getPkpSessionSigs(user as any, pkp as any);
-    console.log(ses);
-  };
 
   return (
     <main className="h-[100vh] flex justify-center items-center bg-black">

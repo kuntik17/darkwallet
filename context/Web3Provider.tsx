@@ -30,6 +30,7 @@ type Web3ContextType = {
   messages: any[];
   image: string | null;
   setTgUser: (tgUser: TelegramUser) => void;
+  mint: () => void;
 };
 
 // Create a new context for the Web3 provider
@@ -165,9 +166,13 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     setAddress(accounts?.[0]);
     const result = startLitClient();
     setLit(result);
+
+    router.push("/dashboard");
+  };
+
+  const mint = async () => {
     const litContracts = await connectToLitContracts(provider);
     setMintedPkp(litContracts);
-    router.push("/dashboard");
   };
 
   const startLitClient = (): ILitNodeClient => {
@@ -248,7 +253,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     getMessages();
   }, [address, getMessages]);
 
-  return <Web3Context.Provider value={{ login, address, hideMessage, viewMessage, messages, image, setTgUser }}>{children}</Web3Context.Provider>;
+  return <Web3Context.Provider value={{ login, mint, address, hideMessage, viewMessage, messages, image, setTgUser }}>{children}</Web3Context.Provider>;
 };
 
 export const useWeb3 = () => {
