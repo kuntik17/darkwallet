@@ -118,16 +118,17 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
       },
     ];
 
-    const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum", sdk);
-    // if (type === "file") {
-    //   const uintArray = decodeb64(decodedMessage);
-    //   const blob = new Blob([uintArray], { type: "image/png" });
+    const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum");
+    if (type === "file") {
+      const uintArray = decodeb64(decodedMessage);
+      const blob = new Blob([uintArray], { type: "image/png" });
 
-    //   if (blob instanceof Blob) {
-    //     const blobUrl = URL.createObjectURL(blob);
-    //     setImage(blobUrl);
-    //   }
-    // }
+      if (blob instanceof Blob) {
+        const blobUrl = URL.createObjectURL(blob);
+        console.log(blobUrl);
+        setImage(blobUrl);
+      }
+    }
 
     return decodedMessage;
   };

@@ -38,12 +38,12 @@ export default function Popup({ open, setOpen, handleForm }: { open: boolean; se
     handleForm(formData);
   };
 
-  // const handleInputTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     type: e.target.value as "text" | "file",
-  //   }));
-  // };
+  const handleInputTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      type: e.target.value as "text" | "file",
+    }));
+  };
 
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -66,7 +66,7 @@ export default function Popup({ open, setOpen, handleForm }: { open: boolean; se
 
                     <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                       <div className="col-span-full">
-                        {/* <fieldset>
+                        <fieldset>
                           <legend className="block text-sm font-medium leading-6 text-gray-400">Secret Type</legend>
                           <div className="mt-4  flex flex-row gap-2">
                             <div className="flex items-center">
@@ -98,7 +98,7 @@ export default function Popup({ open, setOpen, handleForm }: { open: boolean; se
                               </label>
                             </div>
                           </div>
-                        </fieldset> */}
+                        </fieldset>
                       </div>
 
                       {formData.type === "text" && (
