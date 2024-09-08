@@ -1,5 +1,5 @@
 import * as LitJsSdk from "@lit-protocol/lit-node-client-nodejs";
-import { checkAndSignAuthMessage } from "@lit-protocol/lit-node-client";
+import { checkAndSignAuthMessage, ethConnect } from "@lit-protocol/lit-node-client";
 import { AccessControlConditions, AuthSig, ILitNodeClient } from "@lit-protocol/types";
 
 declare global {
@@ -56,11 +56,12 @@ export async function decryptWithLit(
   accessControlConditions: AccessControlConditions,
   chain: string
 ): Promise<string> {
+  ethConnect.disconnectWeb3();
   let authSig = await checkAndSignAuthMessage({
     chain,
     nonce: Date.now().toString(),
   });
-  console.log(authSig.sig);
+
   const decryptedString = await LitJsSdk.decryptToString(
     {
       accessControlConditions,
