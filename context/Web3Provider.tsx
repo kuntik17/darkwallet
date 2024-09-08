@@ -48,19 +48,6 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const [pkpSessionSigs, setPkpSessionSigs] = useState<PkpSessionSigs | null>(null);
   const [telegramUser, setTelegramUser] = useState<TelegramUser | null>(null);
 
-  // useEffect(() => {
-  //   const tgApp = window.Telegram?.WebApp;
-  //   if (tgApp) {
-  //     console.log("tgApp", tgApp);
-  //     setTelegramUser(tgApp.initDataUnsafe.user); // temp fix until we fix the provider
-  //     const telegramApp = window.Telegram.WebApp;
-  //     console.log("Telegram App", telegramApp);
-  //     telegramApp.expand();
-  //     telegramApp.initDataUnsafe.user;
-  //     console.log("Telegram user 1: ", tgApp.initDataUnsafe.user);
-  //   }
-  // }, []);
-
   useEffect(() => {
     const init = async () => {
       try {
@@ -176,7 +163,6 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     setAddress(accounts?.[0]);
     const result = startLitClient();
     setLit(result);
-    console.log(provider);
     router.push("/dashboard");
   };
 
@@ -201,7 +187,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
       },
     ];
 
-    const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum");
+    const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum", pkpSessionSigs);
     if (type === "file") {
       const uintArray = decodeb64(decodedMessage);
       const blob = new Blob([uintArray], { type: "image/png" });

@@ -88,6 +88,7 @@ export default function Home() {
   }
 
   const getSS = async () => {
+    console.log("getting ss", pkp);
     const litNodeClient = await connectToLitNodes();
     const sessionSignatures = await getSessionSignatures(litNodeClient, pkp, data);
     console.log("sessionSignatures", sessionSignatures);
@@ -95,9 +96,7 @@ export default function Home() {
   };
 
   const mintPkp = async () => {
-    console.log("minting pkp");
     const pkp = await connectToLitContracts(provider);
-    console.log("pkp", pkp);
     setPkp(pkp);
     getSS();
   };

@@ -19,7 +19,6 @@ export const connectToLitContracts = async (provider: any) => {
   await provider.send("eth_requestAccounts", []);
   const ethersProvider = new ethers.providers.Web3Provider(provider);
   const signer = ethersProvider.getSigner();
-  console.log("signer", signer);
   const litContracts = new LitContracts({
     signer,
     network: LitNetwork.DatilDev,
@@ -28,13 +27,11 @@ export const connectToLitContracts = async (provider: any) => {
 
   const hash = await Hash.of(litActionCode);
   const pkp = (await litContracts.pkpNftContractUtils.write.mint()).pkp;
-  console.log("pkp", pkp);
   const permitted = await litContracts.addPermittedAction({
     authMethodScopes: [AuthMethodScope.SignAnything],
     pkpTokenId: pkp.tokenId,
     ipfsId: hash,
   });
-  console.log(permitted, "permitted");
   return pkp;
 };
 

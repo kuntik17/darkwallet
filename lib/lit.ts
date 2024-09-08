@@ -1,6 +1,6 @@
 import * as LitJsSdk from "@lit-protocol/lit-node-client-nodejs";
 import { checkAndSignAuthMessage } from "@lit-protocol/lit-node-client";
-import { AccessControlConditions, ILitNodeClient } from "@lit-protocol/types";
+import { AccessControlConditions, AuthSig, ILitNodeClient } from "@lit-protocol/types";
 
 declare global {
   interface Window {
@@ -54,12 +54,13 @@ export async function decryptWithLit(
   ciphertext: string,
   dataToEncryptHash: string,
   accessControlConditions: AccessControlConditions,
-  chain: string
+  chain: string,
+  authSig: AuthSig
 ): Promise<string> {
-  let authSig = await checkAndSignAuthMessage({
-    chain,
-    nonce: Date.now().toString(),
-  });
+  // let authSig = await checkAndSignAuthMessage({
+  //   chain,
+  //   nonce: Date.now().toString(),
+  // });
 
   const decryptedString = await LitJsSdk.decryptToString(
     {
