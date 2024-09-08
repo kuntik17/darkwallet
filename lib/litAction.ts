@@ -9,11 +9,10 @@ const _litActionCode = async () => {
 
   try {
     const _telegramUserData = JSON.parse(telegramUserData);
-    console.log(_telegramUserData);
     // Validating the Telegram user data, go here to learn more:
     // https://core.telegram.org/widgets/login#checking-authorization
     const { hash, ...otherData } = _telegramUserData;
-    console.log(hash, otherData);
+
     const dataCheckString = Object.entries(otherData)
       .sort(([a], [b]) => a.localeCompare(b))
       .map(([key, value]) => `${key}=${value}`)
@@ -36,8 +35,6 @@ const _litActionCode = async () => {
       });
     }
 
-    console.log(isValid);
-
     const isRecent = Date.now() / 1000 - _telegramUserData.auth_date < 600;
     if (!isRecent) {
       return Lit.Actions.setResponse({
@@ -46,8 +43,6 @@ const _litActionCode = async () => {
       });
     }
 
-    console.log(isRecent);
-
     // Checking if usersAuthMethodId is a permitted Auth Method for pkpTokenId
     const usersAuthMethodId = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(`telegram:${_telegramUserData.id}`));
     const abiEncodedData = IS_PERMITTED_AUTH_METHOD_INTERFACE.encodeFunctionData("isPermittedAuthMethod", [pkpTokenId, TELEGRAM_AUTH_METHOD_TYPE, usersAuthMethodId]);
@@ -55,20 +50,16 @@ const _litActionCode = async () => {
       to: LIT_PKP_PERMISSIONS_CONTRACT_ADDRESS,
       data: abiEncodedData,
     };
-    console.log(isPermittedTx);
     const isPermitted = await Lit.Actions.callContract({
       chain: "yellowstone",
       txn: ethers.utils.serializeTransaction(isPermittedTx),
     });
-    console.log(isPermitted);
     if (!isPermitted) {
       return Lit.Actions.setResponse({
         response: "false",
         reason: "Telegram user is not authorized to use this PKP",
       });
     }
-
-    console.log("isPermitted");
 
     return Lit.Actions.setResponse({ response: "true" });
   } catch (error) {
