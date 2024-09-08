@@ -45,7 +45,7 @@ export default function Home() {
       webApp.expand();
       setTelegram(true);
       if (connected && provider) {
-        mintPkp(user.id);
+        mintPkp(user.id.toString());
       }
     } else {
       setTelegram(false);
