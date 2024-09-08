@@ -23,7 +23,6 @@ declare global {
 export default function Home() {
   const { login, mint } = useWeb3();
   const { user, webApp } = useTelegram();
-  const { connected, provider } = useSDK();
   const [telegram, setTelegram] = useState<boolean>(false);
 
   useEffect(() => {
@@ -34,7 +33,7 @@ export default function Home() {
     } else {
       setTelegram(false);
     }
-  }, [webApp, user, provider, connected]);
+  }, [webApp, user]);
 
   return (
     <main className="h-[100vh] flex justify-center items-center bg-black">
