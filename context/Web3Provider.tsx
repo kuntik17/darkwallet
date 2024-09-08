@@ -190,9 +190,9 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     const hash = urlParams.get("hash");
     urlParams.delete("hash");
     urlParams.sort();
-
     let dataCheckString = "";
-    for (const [key, value] of urlParams.entries()) {
+    for (const entry of Array.from(urlParams.entries())) {
+      const [key, value] = entry;
       dataCheckString += `${key}=${value}\n`;
     }
     dataCheckString = dataCheckString.slice(0, -1);
