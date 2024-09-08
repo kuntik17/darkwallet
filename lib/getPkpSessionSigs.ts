@@ -55,7 +55,7 @@ export const getPkpSessionSigs = async (telegramUser: TelegramUser, mintedPkp: M
     const { capacityDelegationAuthSig } = await litNodeClient.createCapacityDelegationAuthSig({
       dAppOwnerWallet: ethersSigner,
       capacityTokenId,
-      delegateeAddresses: [mintedPkp.publicKey],
+      delegateeAddresses: [mintedPkp.ethAddress],
       uses: "1",
     });
     console.log(`✅ Created the capacityDelegationAuthSig`);
