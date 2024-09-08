@@ -174,11 +174,8 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   };
 
   const mint = async () => {
-    console.log("minting data");
     const pkp = await connectToLitContracts(provider);
-    console.log(pkp);
     setMintedPkp(pkp);
-    console.log(initData);
     setData(initData);
   };
 
