@@ -1,6 +1,6 @@
 import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
 
-export default function ViewPopup({ open, setOpen, data }: { open: boolean; setOpen: (isOpen: boolean) => void; data: { title: string; message: string } }) {
+export default function ViewPopup({ open, setOpen, data }: { open: boolean; setOpen: (isOpen: boolean) => void; data: { title: string; message: string; type: string } }) {
   if (!data) {
     return null;
   }
@@ -8,7 +8,6 @@ export default function ViewPopup({ open, setOpen, data }: { open: boolean; setO
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
       <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
-
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <DialogPanel className="relative transform overflow-hidden rounded-lg bg-black px-4 pb-4 pt-5 text-left shadow-xl w-full max-w-sm sm:my-8 sm:p-6">
           <div>
@@ -32,14 +31,18 @@ export default function ViewPopup({ open, setOpen, data }: { open: boolean; setO
                       />
                     </div>
                     <div className="mt-2">
-                      <p className="mt-3 text-sm leading-6 text-gray-400">Write your message to keep.</p>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={3}
-                        className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-amber-200 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-amber-200 sm:text-sm sm:leading-6"
-                        value={data.message}
-                      />
+                      <p className="mt-3 text-sm leading-6 text-gray-400">Your message to keep.</p>
+                      {data.type === "text" ? (
+                        <textarea
+                          id="message"
+                          name="message"
+                          rows={3}
+                          className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-amber-200 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-amber-200 sm:text-sm sm:leading-6"
+                          value={data.message}
+                        />
+                      ) : (
+                        <img src={data.message} alt="Secret" />
+                      )}
                     </div>
                   </div>
                 </div>

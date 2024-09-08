@@ -13,7 +13,7 @@ export default function Dashboard() {
   const [data, setData] = useState<any>(null);
   const [openView, setOpenView] = useState(false);
 
-  const { hideMessage, messages, viewMessage, mint } = useWeb3();
+  const { hideMessage, messages, viewMessage, mint, image } = useWeb3();
 
   const handleForm = (formData: any) => {
     if (formData.type === "text") {
@@ -34,7 +34,8 @@ export default function Dashboard() {
     const data = await viewMessage(message.ciphertext, message.dataToEncryptHash, message.type);
     setData({
       title: message.title,
-      message: data,
+      message: message.type === "text" ? message.message : image,
+      type: message.type,
     });
     setOpenView(true);
   };
