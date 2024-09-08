@@ -6,6 +6,9 @@ import { getSessionSignatures, connectToLitNodes, connectToLitContracts } from "
 import { useTelegram } from "@/context/TelegramProvider";
 import { useSDK } from "@metamask/sdk-react";
 import { useWeb3 } from "@/context/Web3Provider";
+import { mintPkp } from "@/lib/mintPkp";
+import { type TelegramUser } from "@/types/types";
+
 interface TelegramWebApp {
   ready: () => void;
   showPopup: (params: { title?: string; message: string; buttons: Array<{ text: string; type: string }> }) => void;
@@ -44,7 +47,7 @@ export default function Home() {
       webApp.expand();
       setTelegram(true);
       if (connected && provider) {
-        mintPkp();
+        mintPkpAlt();
       }
     } else {
       setTelegram(false);
@@ -95,10 +98,13 @@ export default function Home() {
     setSessionSignatures(sessionSignatures);
   };
 
-  const mintPkp = async () => {
-    const pkp = await connectToLitContracts(provider);
-    setPkp(pkp);
-    getSS();
+  const mintPkpAlt = async () => {
+    if (user && "auth_date" in user && "hash" in user) {
+      const pkp = await mintPkp(user as TelegramUser);
+      console.log(pkp);
+    } else {
+      console.error("User is not properly defined or missing required properties");
+    }
   };
 
   return (
