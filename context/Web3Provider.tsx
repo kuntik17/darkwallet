@@ -12,6 +12,7 @@ import { TelegramUser } from "@/types/types";
 import { mintPkp } from "@/lib/mintPkp";
 import { getPkpSessionSigs } from "@/lib/getPkpSessionSigs";
 import { useSDK } from "@metamask/sdk-react";
+import { connectToLitContracts, getSessionSignatures, connectToLitNodes } from "@/lib/litConnections";
 
 type MintedPkp = {
   tokenId: string;
@@ -162,7 +163,8 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     setAddress(accounts?.[0]);
     const result = startLitClient();
     setLit(result);
-    handleMintPkp();
+    const litContracts = await connectToLitContracts(provider);
+    setMintedPkp(litContracts);
     router.push("/dashboard");
   };
 
@@ -186,8 +188,12 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
         },
       },
     ];
-    getPkpSessionSigs(telegramUser as TelegramUser, mintedPkp as MintedPkp);
-    const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum", pkpSessionSigs);
+
+    const litNodeClient = await connectToLitNodes();
+    const result = await getSessionSignatures(litNodeClient, mintedPkp as MintedPkp, telegramUser?.id.toString() as string);
+    console.log(result);
+    // getPkpSessionSigs(telegramUser as TelegramUser, mintedPkp as MintedPkp);
+    const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum", result);
     if (type === "file") {
       const uintArray = decodeb64(decodedMessage);
       const blob = new Blob([uintArray], { type: "image/png" });
