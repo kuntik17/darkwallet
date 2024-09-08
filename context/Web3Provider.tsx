@@ -81,8 +81,8 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
   const login = async () => {
     const accounts = await sdk?.connect();
     setAddress(accounts?.[0]);
-    // const result = startLitClient();
-    // setLit(result);
+    const result = startLitClient();
+    setLit(result);
     router.push("/dashboard");
   };
 
@@ -92,6 +92,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     setData(initData);
   };
 
+  // TODO Fix to get session signatures
   const getSS = async () => {
     const litNodeClient = await connectToLitNodes();
     const sessionSignatures = await getSessionSignatures(litNodeClient, mintedPkp as MintedPkp, data);
