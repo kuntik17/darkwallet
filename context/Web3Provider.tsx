@@ -199,7 +199,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     const litNodeClient = await connectToLitNodes();
     const result = await getSessionSignatures(litNodeClient, mintedPkp as MintedPkp, user?.id.toString() as string);
     console.log(result);
-
+    const sig = await getPkpSessionSigs(user as unknown as TelegramUser, mintPkp as any);
     // const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum");
     // if (type === "file") {
     //   const uintArray = decodeb64(decodedMessage);
