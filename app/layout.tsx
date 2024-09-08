@@ -4,6 +4,7 @@ import "./globals.css";
 import { Web3Provider } from "@/context/Web3Provider";
 import { TelegramProvider } from "@/context/TelegramProvider";
 import { MetaMaskProvider } from "@metamask/sdk-react";
+import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -13,6 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Script src="https://telegram.org/js/telegram-web-app.js" strategy="beforeInteractive" />
       <MetaMaskProvider
         debug={false}
         sdkOptions={{
