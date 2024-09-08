@@ -102,9 +102,11 @@ export default function Home() {
   const mint = async (id: string) => {
     const pkp = await mintPkp(id);
     setPkp(pkp as any);
-    setTimeout(() => {
-      getPkpSessionSigs(user as any, pkp as any);
-    }, 10000);
+  };
+
+  const getPkp = async () => {
+    const ses = await getPkpSessionSigs(user as any, pkp as any);
+    console.log(ses);
   };
 
   return (

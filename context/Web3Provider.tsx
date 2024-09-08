@@ -162,6 +162,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     setAddress(accounts?.[0]);
     const result = startLitClient();
     setLit(result);
+    handleMintPkp();
     router.push("/dashboard");
   };
 
