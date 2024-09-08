@@ -57,7 +57,7 @@ export const getSessionSignatures = async (litNodeClient: LitNodeClient, pkp: an
         ability: LitAbility.LitActionExecution,
       },
     ],
-    expiration: new Date(Date.now() + 1000 * 60 * 10).toISOString(), // 10 minutes
+    expiration: new Date(Date.now() + 1000 * 60 * 60).toISOString(), // 1 hour
   });
   console.log(`✅ Got PKP Session Sigs: ${JSON.stringify(sessionSignatures, null, 2)}`);
   return sessionSignatures;
