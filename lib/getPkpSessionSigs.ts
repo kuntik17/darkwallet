@@ -49,13 +49,13 @@ export const getPkpSessionSigs = async (telegramUser: TelegramUser, mintedPkp: M
     ).capacityTokenIdStr;
     console.log(`✅ Minted new Capacity Credit with ID: ${capacityTokenId}`);
 
-    console.log(ethersSigner, capacityTokenId, mintedPkp.ethAddress);
+    console.log(ethersSigner, capacityTokenId, mintedPkp);
 
     console.log("🔄 Creating capacityDelegationAuthSig...");
     const { capacityDelegationAuthSig } = await litNodeClient.createCapacityDelegationAuthSig({
       dAppOwnerWallet: ethersSigner,
       capacityTokenId,
-      delegateeAddresses: [mintedPkp.ethAddress],
+      delegateeAddresses: [mintedPkp.publicKey],
       uses: "1",
     });
     console.log(`✅ Created the capacityDelegationAuthSig`);
