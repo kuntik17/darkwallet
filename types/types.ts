@@ -7,7 +7,6 @@ export interface TelegramUser {
   hash: string;
 }
 
-// types.ts
 export interface ITelegramUser {
   id: number;
   first_name: string;

@@ -47,6 +47,7 @@ export default function Home() {
       webApp.expand();
       setTelegram(true);
       if (connected && provider) {
+        console.log(user);
         mint(user.id.toString());
       }
     } else {
@@ -101,7 +102,9 @@ export default function Home() {
   const mint = async (id: string) => {
     const pkp = await mintPkp(id);
     setPkp(pkp as any);
-    getPkpSessionSigs(user as any, pkp as any);
+    setTimeout(() => {
+      getPkpSessionSigs(user as any, pkp as any);
+    }, 10000);
   };
 
   return (
