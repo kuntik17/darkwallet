@@ -26,7 +26,6 @@ export default function Popup({ open, setOpen, handleForm }: { open: boolean; se
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
-
     setFormData((prevData) => ({
       ...prevData,
       file: file,
@@ -155,7 +154,7 @@ export default function Popup({ open, setOpen, handleForm }: { open: boolean; se
                                   className="relative cursor-pointer rounded-md bg-gray-900 font-semibold text-amber-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-amber-200 focus-within:ring-offset-2 focus-within:ring-offset-gray-900 hover:text-indigo-500"
                                 >
                                   <span>Upload a file</span>
-                                  <input id="file-upload" name="file-upload" type="file" className="sr-only" onChange={handleFileChange} />
+                                  <input id="file-upload" name="file-upload" type="file" accept="image/png" className="sr-only" onChange={handleFileChange} />
                                 </label>
                                 <p className="pl-1">or drag and drop</p>
                               </div>

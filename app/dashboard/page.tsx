@@ -18,10 +18,9 @@ export default function Dashboard() {
   const handleForm = (formData: any) => {
     if (formData.type === "text") {
       hideMessage(formData.title, formData.message, formData.type);
-    } else {
-      const blobData = formData.file;
-      const blob = new Blob([blobData], { type: blobData.type });
-      blobToBase64(blob).then((base64) => {
+    } else if (formData.type === "file") {
+      const file = formData.file;
+      blobToBase64(file).then((base64) => {
         const encoded = encodeb64(base64);
         hideMessage(formData.title, encoded as string, formData.type);
       });
@@ -34,7 +33,7 @@ export default function Dashboard() {
     const data = await viewMessage(message.ciphertext, message.dataToEncryptHash, message.type);
     setData({
       title: message.title,
-      message: message.type === "text" ? message.message : image,
+      message: message.type === "text" ? data : image,
       type: message.type,
     });
     setOpenView(true);

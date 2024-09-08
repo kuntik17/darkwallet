@@ -122,10 +122,8 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     if (type === "file") {
       const uintArray = decodeb64(decodedMessage);
       const blob = new Blob([uintArray], { type: "image/png" });
-
       if (blob instanceof Blob) {
         const blobUrl = URL.createObjectURL(blob);
-        console.log(blobUrl);
         setImage(blobUrl);
       }
     }
@@ -149,16 +147,32 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
         },
       ];
 
-      const { ciphertext, dataToEncryptHash } = await encryptWithLit(lit as ILitNodeClient, newMessage, accessControlConditions, "ethereum");
-
-      const dataToSave = {
-        title: title,
-        ciphertext: ciphertext,
-        dataToEncryptHash: dataToEncryptHash,
-        type: type,
-        wallet: address,
-      };
-
+      let dataToSave: any;
+      if (type === "file") {
+        const { ciphertext, dataToEncryptHash } = await LitJsSdk.encryptString(
+          {
+            accessControlConditions,
+            dataToEncrypt: newMessage,
+          },
+          lit as ILitNodeClient
+        );
+        dataToSave = {
+          title: title,
+          ciphertext: ciphertext,
+          dataToEncryptHash: dataToEncryptHash,
+          type: type,
+          wallet: address,
+        };
+      } else {
+        const { ciphertext, dataToEncryptHash } = await encryptWithLit(lit as ILitNodeClient, newMessage, accessControlConditions, "ethereum");
+        dataToSave = {
+          title: title,
+          ciphertext: ciphertext,
+          dataToEncryptHash: dataToEncryptHash,
+          type: type,
+          wallet: address,
+        };
+      }
       // TODO: Save data to the chain
       const { data, error } = await supabase.from("secrets").insert(dataToSave);
       if (error) {

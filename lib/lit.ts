@@ -9,24 +9,32 @@ declare global {
 }
 
 export function encodeb64(uintarray: any) {
-  const b64 = Buffer.from(uintarray).toString("base64");
+  const b64 = btoa(uintarray);
   return b64;
 }
 
 export function blobToBase64(blob: Blob) {
   return new Promise((resolve, _) => {
     const reader = new FileReader();
-    reader.onloadend = () =>
-      resolve(
-        // @ts-ignore
-        reader.result.replace("data:application/octet-stream;base64,", "")
-      );
+    reader.onloadend = () => {
+      const result = reader.result as string;
+      const base64Data = result.replace(/^data:(.*?);base64,/, "");
+      resolve(base64Data);
+    };
     reader.readAsDataURL(blob);
   });
 }
 
-export function decodeb64(b64String: any) {
-  return new Uint8Array(Buffer.from(b64String, "base64"));
+export function decodeb64(base64: string) {
+  const binaryString = atob(base64);
+  const len = binaryString.length;
+  const uintArray = new Uint8Array(len);
+
+  for (let i = 0; i < len; i++) {
+    uintArray[i] = binaryString.charCodeAt(i);
+  }
+
+  return uintArray;
 }
 
 export async function encryptWithLit(

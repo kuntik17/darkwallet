@@ -28,10 +28,11 @@ export default function ViewPopup({ open, setOpen, data }: { open: boolean; setO
                         autoComplete="title"
                         className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-amber-200 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-amber-200 sm:text-sm sm:leading-6"
                         value={data.title}
+                        disabled
                       />
                     </div>
                     <div className="mt-2">
-                      <p className="mt-3 text-sm leading-6 text-gray-400">Your message to keep.</p>
+                      <p className="mt-3 text-sm leading-6 text-gray-400">Your message.</p>
                       {data.type === "text" ? (
                         <textarea
                           id="message"
@@ -39,6 +40,7 @@ export default function ViewPopup({ open, setOpen, data }: { open: boolean; setO
                           rows={3}
                           className="block w-full rounded-md border-0 bg-white/5 py-1.5 text-amber-200 shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-amber-200 sm:text-sm sm:leading-6"
                           value={data.message}
+                          disabled
                         />
                       ) : (
                         <img src={data.message} alt="Secret" />
