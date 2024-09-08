@@ -193,7 +193,7 @@ export const Web3Provider = ({ children }: { children: ReactNode }) => {
     const result = await getSessionSignatures(litNodeClient, mintedPkp as MintedPkp, telegramUser?.id.toString() as string);
     console.log(result);
     // getPkpSessionSigs(telegramUser as TelegramUser, mintedPkp as MintedPkp);
-    const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum", result);
+    const decodedMessage = await decryptWithLit(lit as ILitNodeClient, ciphertext, dataToEncryptHash, accessControlConditions, "ethereum", result as any);
     if (type === "file") {
       const uintArray = decodeb64(decodedMessage);
       const blob = new Blob([uintArray], { type: "image/png" });
